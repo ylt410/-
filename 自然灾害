@@ -1,0 +1,102 @@
+-- =====================================================
+-- 自然灾害终极整合脚本（飞行 + 穿墙 + 黑洞 + 开屏）
+-- 先显示开屏，结束后2秒执行功能脚本
+-- =====================================================
+
+local Players = game:GetService("Players")
+local RunService = game:GetService("RunService")
+local UserInputService = game:GetService("UserInputService")
+local CoreGui = game:GetService("CoreGui")
+local HttpService = game:GetService("HttpService")
+local LocalPlayer = Players.LocalPlayer
+
+-- ====================== 开屏感谢（轻薄版：小字、无黑底、透明渐现） ======================
+task.spawn(function()
+    local sg = Instance.new("ScreenGui", CoreGui)
+    sg.Name = "DisasterWelcome"
+    sg.ResetOnSpawn = false
+    
+    local label = Instance.new("TextLabel", sg)
+    label.Size = UDim2.new(0.8, 0, 0.25, 0)  -- 缩小高度
+    label.Position = UDim2.new(0.1, 0, 0.35, 0)
+    label.BackgroundTransparency = 1  -- 无黑底，纯透明
+    label.TextColor3 = Color3.fromRGB(0, 255, 120)
+    label.TextScaled = true
+    label.TextSize = 18  -- 字小一点
+    label.Font = Enum.Font.Gotham
+    label.TextStrokeTransparency = 0.5  -- 轻微描边
+    label.TextStrokeColor3 = Color3.new(0,0,0)
+    label.TextWrapped = true
+    label.Text = "感谢 "..LocalPlayer.Name.."\n使用飞行 + 穿墙 + 黑洞\n自然灾害终极整合脚本\n享受毁灭吧！"
+    
+    -- 渐现效果
+    label.TextTransparency = 1
+    label:TweenPosition(UDim2.new(0.1,0,0.35,0), "Out", "Quad", 0.5, true)
+    label:TweenSize(UDim2.new(0.8,0,0.25,0), "Out", "Quad", 0.5, true)
+    
+    -- 渐现动画
+    for i = 1, 0, -0.05 do
+        label.TextTransparency = i
+        task.wait(0.03)
+    end
+    
+    task.wait(2)  -- 显示4秒
+    
+    -- 渐隐动画
+    for i = 0, 1, 0.05 do
+        label.TextTransparency = i
+        task.wait(0.03)
+    end
+    
+    sg:Destroy()
+    
+    -- 开屏结束后等待2秒再执行功能脚本
+    print("开屏结束，等待2秒后加载功能脚本...")
+    task.wait(1)
+    loadFunctionScripts()
+end)
+
+-- ====================== 功能脚本加载函数 ======================
+function loadFunctionScripts()
+    print("开始加载功能脚本...")
+    
+    -- ====================== 加载飞行脚本 ======================
+    task.spawn(function()
+        local success, err = pcall(function()
+            loadstring(game:HttpGet("https://raw.githubusercontent.com/SkitteDev/FLY-V3-roblox-/refs/heads/main/fly%20v3%20script%20roblox"))()
+        end)
+        if not success then
+            warn("飞行脚本加载失败: " .. tostring(err))
+        else
+            print("✓ 飞行脚本加载成功")
+        end
+    end)
+
+    -- ====================== 加载穿墙脚本 ======================
+    task.spawn(function()
+        local success, err = pcall(function()
+            loadstring(game:HttpGet("https://raw.githubusercontent.com/ylt410/roblox-Script/refs/heads/main/穿墙"))()
+        end)
+        if not success then
+            warn("穿墙脚本加载失败: " .. tostring(err))
+        else
+            print("✓ 穿墙脚本加载成功")
+        end
+    end)
+
+    -- ====================== 加载黑洞脚本 ======================
+    task.spawn(function()
+        local success, err = pcall(function()
+            loadstring(game:HttpGet("https://raw.githubusercontent.com/ylt410/roblox-Script/refs/heads/main/黑洞"))()
+        end)
+        if not success then
+            warn("黑洞脚本加载失败: " .. tostring(err))
+        else
+            print("✓ 黑洞脚本加载成功")
+        end
+    end)
+
+    print("所有功能脚本加载完毕！飞行/穿墙/黑洞已启动！享受自然灾害生存吧~")
+end
+
+print("整合脚本初始化完成 → 等待开屏显示...")
